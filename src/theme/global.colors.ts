@@ -83,4 +83,8 @@ export const GlobalColors = {
 	white2: '#F4F4F4',
 	white3: '#FFFEF0',
 	white4: '#D1D1D1',
+
+  black1: '#333F48',
+	black2: '#000000',
+	black3: '#5B7181',
 };

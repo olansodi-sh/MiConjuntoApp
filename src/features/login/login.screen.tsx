@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import {Dimensions} from 'react-native';
 import { RoboBoldText, RoboRegularText } from '../../components'
 import MainButton from '../../components/buttons/main.button'
+import MainInput from '../../components/inputs/main.input'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -36,11 +37,11 @@ const LoginScreen = () => {
                   Conéctate con tu comunidad y mantente al día
                 </RoboRegularText>
               </View>
-              <View style={{width:'100%', height:'48%',backgroundColor:'blue'}}>
-
+              <View style={{width:'100%', height:'48%', alignContent: 'center',justifyContent: 'center' }}>
+                <MainInput />
               </View>
               <View style={{width:'100%', height:'25%', justifyContent: 'center', alignItems: 'center' }}>
-                <MainButton buttonStyle={{ backgroundColor: GlobalColors.bluePrimary,width: '90%'}} textSize={18} textStyle={{color: GlobalColors.white }} text={'Iniciar sesión'}/>
+                <MainButton buttonStyle={{ backgroundColor: GlobalColors.bluePrimary,width: '90%' }} textSize={18} textStyle={{color: GlobalColors.white }} text={'Iniciar sesión'}/>
               </View>
 
 
