@@ -1,5 +1,5 @@
-import { View, Text, StatusBar, KeyboardAvoidingView, Platform, StyleSheet, Image } from 'react-native'
-import React from 'react'
+import { View, Text, StatusBar, KeyboardAvoidingView, Platform, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
 import { GlobalColors } from '../../theme/global.colors'
 import useSafeAreaSize from '../../hooks/useSafeAreaSize.hook'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -15,6 +15,12 @@ const windowHeight = Dimensions.get('window').height;
 const LoginScreen = () => {
 
   const { layoutScreen, onLayout } = useSafeAreaSize()
+
+  const [usuario, setUsuario] = useState('')
+  const [password, setPassword] = useState('')
+  const [usuarioFocus, setUsuarioFocus] = useState(false)
+  const [passwordFocus, setPasswordFocus] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   return (
     <React.Fragment>
@@ -37,9 +43,48 @@ const LoginScreen = () => {
                   Conéctate con tu comunidad y mantente al día
                 </RoboRegularText>
               </View>
-              <View style={{width:'100%', height:'48%', alignContent: 'center',justifyContent: 'center' }}>
-                <MainInput />
+
+              {/* ir los inputs de email y contraseña */}
+              <View style={{width:'100%', height:'48%', alignItems:'center', gap: 12 }}>
+                <View style={{width:'90%', height:'80%',alignItems:'center', gap: 12 }}>
+                  <MainInput
+                    renderLabel
+                    textLabel="Usuario"
+                    containerStyles={{ width: '100%',height:'15%' ,borderWidth:1, borderColor:'green'}}
+                    placeholder="Escribe tu usuario..."
+                    value={usuario}
+                    onChangeText={setUsuario}
+                    focus={usuarioFocus}
+                    onFocus={() => { setUsuarioFocus(true); setPasswordFocus(false) }}
+                    animate
+                    animationInputType="shake"
+                  />
+                  <MainInput
+                    renderLabel
+                    containerStyles={{ width: '100%',height:'15%' ,borderWidth:1, borderColor:'green'}}
+                    textLabel="Contraseña"
+                    placeholder="••••••••"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureText={!showPassword}
+                    focus={passwordFocus}
+                    onFocus={() => { setPasswordFocus(true); setUsuarioFocus(false) }}
+                    animate
+                    animationInputType="shake"
+                    renderRightIcon
+                    rightIcon={
+                      <TouchableOpacity onPress={() => setShowPassword(prev => !prev)} activeOpacity={0.6}>
+                        <Text style={styles.eyeIcon}>{showPassword ? '🔓' : '🔒'}</Text>
+                      </TouchableOpacity>
+                    }
+                  />
+                </View>
+                <View style={{width:'100%', height:'20%', flexDirection:'row' }}>
+                  <View style={{width:'50%', height:'100%', borderWidth:1, backgroundColor:'lightgreen'}}></View>
+                  <View style={{width:'50%', height:'100%', borderWidth:1, backgroundColor:'lightgreen'}}></View>
+                </View>
               </View>
+
               <View style={{width:'100%', height:'25%', justifyContent: 'center', alignItems: 'center' }}>
                 <MainButton buttonStyle={{ backgroundColor: GlobalColors.bluePrimary,width: '90%' }} textSize={18} textStyle={{color: GlobalColors.white }} text={'Iniciar sesión'}/>
               </View>
@@ -77,7 +122,11 @@ const styles = StyleSheet.create({
     borderTopStartRadius: 30,
     bottom: 0,
     backgroundColor: GlobalColors.white,
-    width: windowWidth, 
-    height: windowHeight * 0.65 
+    width: windowWidth,
+    height: windowHeight * 0.65
+  },
+  eyeIcon: {
+    fontSize: 20,
+    color: GlobalColors.gray2,
   },
 })

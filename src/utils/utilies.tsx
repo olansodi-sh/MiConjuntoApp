@@ -1,11 +1,11 @@
-import { PixelRatio, useWindowDimensions } from 'react-native';
+import { Dimensions, PixelRatio } from 'react-native';
 
 
 //* Escala de texto adaptativa basada en el ancho de pantalla y font scale del usuario.
 
 const guidelineBaseWidth = 375; // Base de diseño (ej: Pixel 5 =375px)
 export const textAdapter = (baseSize: number) => {
-  const { width } = useWindowDimensions();
+  const { width } = Dimensions.get('window')
   const scale = width / guidelineBaseWidth;
 
   // Escala base según pantalla

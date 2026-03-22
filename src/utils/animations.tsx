@@ -1,7 +1,6 @@
-import { Animated, Easing, ViewStyle } from 'react-native'
-import { useWindowDimensions } from 'react-native'
+import { Animated, Dimensions, Easing, ViewStyle } from 'react-native'
 
-const { width } = useWindowDimensions()
+const { width } = Dimensions.get('window')
 
 // TYPES
 type Direction = 'left' | 'right' | 'top' | 'bottom'

@@ -1,41 +1,102 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native'
+import { Animated, Dimensions, KeyboardTypeOptions, StyleProp, StyleSheet, Text, TextInput, TextStyle, View, ViewStyle } from 'react-native'
 
-
-const { width, height } = useWindowDimensions()
+const { width, height } = Dimensions.get('window')
 
 import { shake, shakeRotate, valueShake, valueShakeRotate } from '../../utils/animations'
 import { textAdapter } from '../../utils/utilies'
 import { GlobalColors } from '../../theme/global.colors'
 
+// Tipos de animación disponibles para el componente
+type AnimationType = 'shake' | 'shakeRotate' | ''
+
+/**
+ * * Interfaz de propiedades del componente CustomInput
+ */
+interface CustomInputProps {
+	/** Booleano que indica si el label debe estar en negrita */
+	labelBold?: boolean
+	/** Texto que se muestra cuando el input no tiene texto */
+	placeholder?: string
+	/** Booleano que indica si se debe mostrar el label */
+	renderLabel?: boolean
+	/** Texto que se muestra como label del input */
+	textLabel?: string
+	/** Estilos que se aplican al texto del label */
+	textLabelStyles?: StyleProp<TextStyle>
+	/** Booleano que indica si se debe mostrar el error */
+	renderError?: boolean
+	/** Texto que se muestra como error */
+	textError?: string
+	/** Valor del input */
+	value?: string
+	/** Función que se ejecuta cuando se cambia el texto del input */
+	onChangeText?: (text: string) => void
+	/** Booleano que indica si se debe mostrar el icono izquierdo */
+	renderLeftIcon?: boolean
+	/** Icono que se muestra a la izquierda del input */
+	leftIcon?: React.ReactNode
+	/** Booleano que indica si se debe mostrar el icono derecho */
+	renderRightIcon?: boolean
+	/** Icono que se muestra a la derecha del input */
+	rightIcon?: React.ReactNode
+	/** Estilos que se aplican al contenedor del input */
+	containerInputStyles?: StyleProp<ViewStyle>
+	/** Estilos que se aplican al contenedor del input */
+	containerStyles?: StyleProp<ViewStyle>
+	/** Estilos que se aplican al contenedor del contenedor del input */
+	containerStylesForContainer?: StyleProp<ViewStyle>
+	/** Booleano que indica si el input está deshabilitado */
+	disabled?: boolean
+	/** Booleano que indica si el input está seleccionado */
+	focus?: boolean
+	/** Función que se ejecuta cuando el input es seleccionado */
+	onFocus?: () => void
+	/** Booleano que indica si el texto del input debe estar protegido */
+	secureText?: boolean
+	/** Tipo de teclado que se muestra al seleccionar el input */
+	keyboardType?: KeyboardTypeOptions
+	/** Booleano que indica si el componente debe animarse */
+	animate?: boolean
+	/** Tipo de animación que se ejecuta para el label */
+	animationLabelType?: AnimationType
+	/** Tipo de animación que se ejecuta para el input */
+	animationInputType?: AnimationType
+	/** Tipo de animación que se ejecuta para el error */
+	animationErrorType?: AnimationType
+	/** Booleano que indica si el campo es requerido */
+	required?: boolean
+}
+
 /**
  * * Componente InputLabel
  *
  * * Recibe las siguientes propiedades:
+ * @property {boolean} labelBold Booleano que indica si el label debe estar en negrita
  * @property {string} placeholder Texto que se muestra cuando el input no tiene texto
  * @property {boolean} renderLabel Booleano que indica si se debe mostrar el label
  * @property {string} textLabel Texto que se muestra como label del input
- * @property {object} textLabelStyles Estilos que se aplican al texto del label
+ * @property {StyleProp<TextStyle>} textLabelStyles Estilos que se aplican al texto del label
  * @property {boolean} renderError Booleano que indica si se debe mostrar el error
  * @property {string} textError Texto que se muestra como error
  * @property {string} value Valor del input
  * @property {function} onChangeText Función que se ejecuta cuando se cambia el texto del input
  * @property {boolean} renderLeftIcon Booleano que indica si se debe mostrar el icono izquierdo
- * @property {component} leftIcon Icono que se muestra a la izquierda del input
+ * @property {React.ReactNode} leftIcon Icono que se muestra a la izquierda del input
  * @property {boolean} renderRightIcon Booleano que indica si se debe mostrar el icono derecho
- * @property {component} rightIcon Icono que se muestra a la derecha del input
- * @property {object} containerInputStyles Estilos que se aplican al contenedor del input
- * @property {object} containerStyles Estilos que se aplican al contenedor del input
- * @property {object} containerStylesForContainer Estilos que se aplican al contenedor del contenedor del input
+ * @property {React.ReactNode} rightIcon Icono que se muestra a la derecha del input
+ * @property {StyleProp<ViewStyle>} containerInputStyles Estilos que se aplican al contenedor del input
+ * @property {StyleProp<ViewStyle>} containerStyles Estilos que se aplican al contenedor del input
+ * @property {StyleProp<ViewStyle>} containerStylesForContainer Estilos que se aplican al contenedor del contenedor del input
  * @property {boolean} disabled Booleano que indica si el input está deshabilitado
  * @property {boolean} focus Booleano que indica si el input está seleccionado
  * @property {function} onFocus Función que se ejecuta cuando el input es seleccionado
  * @property {boolean} secureText Booleano que indica si el texto del input debe estar protegido
- * @property {string} keyboardType Tipo de teclado que se muestra al seleccionar el input
+ * @property {KeyboardTypeOptions} keyboardType Tipo de teclado que se muestra al seleccionar el input
  * @property {boolean} animate Booleano que indica si el componente debe animarse
- * @property {string} animationLabelType Tipo de animación que se ejecuta para el label
- * @property {string} animationInputType Tipo de animación que se ejecuta para el input
- * @property {string} animationErrorType Tipo de animación que se ejecuta para el error
+ * @property {AnimationType} animationLabelType Tipo de animación que se ejecuta para el label
+ * @property {AnimationType} animationInputType Tipo de animación que se ejecuta para el input
+ * @property {AnimationType} animationErrorType Tipo de animación que se ejecuta para el error
  * @property {boolean} required Booleano que indica si el campo es requerido
 
  *
@@ -72,7 +133,7 @@ const CustomInput = ({
 	animationLabelType = '',
 	animationInputType = '',
 	animationErrorType = '',
-}) => {
+}: CustomInputProps) => {
 	const [labelPosition, setLabelPosition] = useState(new Animated.Value(0))
 	const [inputPosition, setInputPosition] = useState(new Animated.Value(0))
 	const [errorPosition, setErrorPosition] = useState(new Animated.Value(0))
