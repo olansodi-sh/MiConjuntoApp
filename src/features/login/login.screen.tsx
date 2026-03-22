@@ -5,6 +5,7 @@ import useSafeAreaSize from '../../hooks/useSafeAreaSize.hook'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {Dimensions} from 'react-native';
 import { RoboBoldText, RoboRegularText } from '../../components'
+import MainButton from '../../components/buttons/main.button'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -26,12 +27,25 @@ const LoginScreen = () => {
             </View>
             {/* bottom */}
             <View style={{...styles.bottomSection }}>
-              <RoboBoldText adjustsFontSizeToFit numberOfLines={1} style={{fontSize: 20, textAlign: 'center', marginTop: 20}}>
-                Welcome Back!
-              </RoboBoldText>
-              <RoboRegularText adjustsFontSizeToFit numberOfLines={2} style={{fontSize: 16, textAlign: 'center', marginTop: 10, paddingHorizontal: 20}}>
-                Please login to your account to continue.
-              </RoboRegularText>
+
+              <View style={{width:'100%', height:'27%', alignItems: 'center', justifyContent: 'center'}}>
+                <RoboBoldText size={25} style={{alignSelf: 'center', color: 'black'}}>
+                  ¡Bienvenido de nuevo!
+                </RoboBoldText>
+                <RoboRegularText size={15} numberOfLines={2} style={{ alignSelf: 'center', marginTop:'3%', color: GlobalColors.sageGreen, alignItems: 'center', textAlign: 'center', width: '90%'}}>
+                  Conéctate con tu comunidad y mantente al día
+                </RoboRegularText>
+              </View>
+              <View style={{width:'100%', height:'48%',backgroundColor:'blue'}}>
+
+              </View>
+              <View style={{width:'100%', height:'25%', justifyContent: 'center', alignItems: 'center' }}>
+                <MainButton buttonStyle={{ backgroundColor: GlobalColors.bluePrimary,width: '90%'}} textSize={18} textStyle={{color: GlobalColors.white }} text={'Iniciar sesión'}/>
+              </View>
+
+
+              
+
 
             </View>
           </View>
