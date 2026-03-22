@@ -7,6 +7,7 @@ import {Dimensions} from 'react-native';
 import { RoboBoldText, RoboRegularText } from '../../components'
 import MainButton from '../../components/buttons/main.button'
 import MainInput from '../../components/inputs/main.input'
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -21,6 +22,7 @@ const LoginScreen = () => {
   const [usuarioFocus, setUsuarioFocus] = useState(false)
   const [passwordFocus, setPasswordFocus] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
 
   return (
     <React.Fragment>
@@ -50,7 +52,7 @@ const LoginScreen = () => {
                   <MainInput
                     renderLabel
                     textLabel="Usuario"
-                    containerStyles={{ width: '100%',height:'15%' ,borderWidth:1, borderColor:'green'}}
+                    containerStyles={{ width: '100%',height:'15%' }}
                     placeholder="Escribe tu usuario..."
                     value={usuario}
                     onChangeText={setUsuario}
@@ -61,7 +63,7 @@ const LoginScreen = () => {
                   />
                   <MainInput
                     renderLabel
-                    containerStyles={{ width: '100%',height:'15%' ,borderWidth:1, borderColor:'green'}}
+                    containerStyles={{ width: '100%',height:'15%' }}
                     textLabel="Contraseña"
                     placeholder="••••••••"
                     value={password}
@@ -79,9 +81,34 @@ const LoginScreen = () => {
                     }
                   />
                 </View>
-                <View style={{width:'100%', height:'20%', flexDirection:'row' }}>
-                  <View style={{width:'50%', height:'100%', borderWidth:1, backgroundColor:'lightgreen'}}></View>
-                  <View style={{width:'50%', height:'100%', borderWidth:1, backgroundColor:'lightgreen'}}></View>
+              
+                <View style={{width:'90%', height:'20%', flexDirection:'row' }}>
+                  <View style={{width:'50%', height:'100%', flexDirection:'row'}}>
+                     <BouncyCheckbox
+                      isChecked={isChecked}
+                      disableText
+                      size={20}
+                      useBuiltInState={false}
+                      fillColor={GlobalColors.bluePrimary}
+                      unFillColor={'transparent'}
+                      iconStyle={{borderColor: 'green'}}
+                      onPress={(checked: boolean) => {
+                            // These two should be same value
+                            console.log('::Checked::', checked);
+                            console.log('::LocalChecked::', isChecked);
+                            setIsChecked(!isChecked);
+                      }} />
+                      <RoboRegularText size={14} style={{color: GlobalColors.gray2, alignSelf:'center', marginLeft: 5}}>
+                        Recordar usuario
+                      </RoboRegularText>
+                  </View>
+                  <View style={{width:'50%', height:'100%' }}>
+                     <TouchableOpacity activeOpacity={0.6} style={{alignSelf:'flex-end', justifyContent:'center', height:'100%'}}>
+                        <RoboRegularText size={14} style={{color: GlobalColors.gray2}}>
+                          ¿Olvidaste tu contraseña?
+                        </RoboRegularText>
+                     </TouchableOpacity>
+                  </View>
                 </View>
               </View>
 
