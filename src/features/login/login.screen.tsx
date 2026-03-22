@@ -4,8 +4,7 @@ import { GlobalColors } from '../../theme/global.colors'
 import useSafeAreaSize from '../../hooks/useSafeAreaSize.hook'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import {Dimensions} from 'react-native';
-import RoboBoldText from '../../components/texts/robo-bold.text'
-import RoboRegularText from '../../components/texts/robo-regular.text'
+import { RoboBoldText, RoboRegularText } from '../../components'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -33,7 +32,7 @@ const LoginScreen = () => {
               <RoboRegularText adjustsFontSizeToFit numberOfLines={2} style={{fontSize: 16, textAlign: 'center', marginTop: 10, paddingHorizontal: 20}}>
                 Please login to your account to continue.
               </RoboRegularText>
-              
+
             </View>
           </View>
         </KeyboardAvoidingView>

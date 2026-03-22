@@ -1,0 +1,7 @@
+export { default as RoboBlackText } from './texts/robo-black.text'
+export { default as RoboBoldText } from './texts/robo-bold.text'
+export { default as RoboExtraBoldText } from './texts/robo-extrabold.text'
+export { default as RoboLightText } from './texts/robo-light.text'
+export { default as RoboMediumText } from './texts/robo-medium.text'
+export { default as RoboRegularText } from './texts/robo-regular.text'
+export { default as RoboSemiBoldText } from './texts/robo-semibold.text'

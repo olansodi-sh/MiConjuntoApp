@@ -2,7 +2,7 @@ import { textAdapter } from '../../utils/utilies'
 import { Text, TextProps } from 'react-native'
 import React from 'react'
 
-interface RoboRegularTextProps extends TextProps {
+interface RoboLightTextProps extends TextProps {
   size?: number;
 }
 
@@ -11,15 +11,15 @@ interface RoboRegularTextProps extends TextProps {
  * @param size Tamaño base del texto (sin adaptar). Por defecto 16.
  * @param style Estilos adicionales para el texto.
  * @param children Contenido del texto.
- * @returns  Un componente de texto con fuente Roboto-Regular y tamaño adaptativo.
+ * @returns  Un componente de texto con fuente Roboto-Light y tamaño adaptativo.
  */
 
-const RoboRegularText = ({ size = 16, style, children, ...props }: RoboRegularTextProps) => {
+const RoboLightText = ({ size = 16, style, children, ...props }: RoboLightTextProps) => {
   return (
-    <Text {...props} style={[{ fontFamily: 'Roboto-Regular', fontSize: textAdapter(size) }, style]}>
+    <Text {...props} style={[{ fontFamily: 'Roboto-Light', fontSize: textAdapter(size) }, style]}>
       {children}    
     </Text>
   );
 };
 
-export default RoboRegularText
+export default RoboLightText
