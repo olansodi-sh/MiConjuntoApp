@@ -1,11 +1,14 @@
-import { View, Text } from 'react-native'
+
+import RootStackNavigation from './src/navigation/root-stack.navigation'
+import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import LoginScreen from './src/features/login/login.screen'
 
 const App = () => {
   return (
     <React.Fragment>
-      <LoginScreen />
+      <NavigationContainer>
+        <RootStackNavigation />
+      </NavigationContainer>
     </React.Fragment>
   )
 }

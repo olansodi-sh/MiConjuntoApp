@@ -31,7 +31,7 @@ const LoginScreen = () => {
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{...styles.keyboardContainer}} onLayout={onLayout}>
           <View style={{...styles.contentContainer}}>
             {/* top */}
-            <View style={{width: windowWidth, height: windowHeight * 0.40, flexShrink: 1, backgroundColor:'red' }}>
+            <View style={{width: windowWidth, height: windowHeight * 0.40, flexShrink: 1, backgroundColor:GlobalColors.white }}>
               <Image blurRadius={0.9} resizeMode="cover" source={require('../../../public/images/loginBackground.png')}  style={{width: '100%', height: '100%'}} />
             </View>
             {/* bottom */}
