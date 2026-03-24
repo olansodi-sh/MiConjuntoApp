@@ -116,19 +116,6 @@ const ShowZoneDetailsScreen = ({ route, navigation }: ShowZoneDetailsScreenProps
           </ScrollView>
 
           {/* CTA Reservar — solo si es reservable */}
-          {isReservable && (
-            <View style={styles.ctaContainer}>
-              <TouchableOpacity
-                activeOpacity={0.85}
-                style={styles.ctaButton}
-                onPress={() => navigation.navigate('CreateZoneReservationScreen', { zone })}
-              >
-                <RoboExtraBoldText size={16} style={styles.ctaText}>
-                  Reservar ahora
-                </RoboExtraBoldText>
-              </TouchableOpacity>
-            </View>
-          )}
 
         </View>
       </SafeAreaView>

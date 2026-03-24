@@ -1,138 +1,183 @@
-import React from 'react';
 import {
   View,
   Image,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   StatusBar,
   Dimensions,
 } from 'react-native';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParamList } from '../../navigation/home-stack.navigation';
+import {
+  RoboExtraBoldText,
+  RoboBoldText,
+  RoboRegularText,
+  RoboSemiBoldText,
+} from '../../components';
 import { GlobalColors } from '../../theme/global.colors';
-import RoboExtraBoldText from '../../components/texts/robo-extrabold.text';
-import RoboBoldText from '../../components/texts/robo-bold.text';
-import RoboRegularText from '../../components/texts/robo-regular.text';
-import RoboMediumText from '../../components/texts/robo-medium.text';
+import { RouteProp } from '@react-navigation/native';
+import React from 'react';
 
 type NoticeDetailRouteProp = RouteProp<HomeStackParamList, 'NoticeDetailScreen'>;
+type NoticeDetailNavProp = StackNavigationProp<HomeStackParamList, 'NoticeDetailScreen'>;
+
+interface NoticeDetailScreenProps {
+  route: NoticeDetailRouteProp;
+  navigation: NoticeDetailNavProp;
+}
 
 const { width, height } = Dimensions.get('window');
 
-const NoticeDetailScreen = () => {
-  const navigation = useNavigation();
-  const route = useRoute<NoticeDetailRouteProp>();
+const NoticeDetailScreen = ({ route, navigation }: NoticeDetailScreenProps) => {
   const { notice } = route.params;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.cream} />
+    <React.Fragment>
+      <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.white} />
+      <SafeAreaView style={styles.safeareaContainer} edges={['top', 'left', 'right']}>
+        <View style={styles.mainContainer}>
 
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton} activeOpacity={0.7}>
-          <RoboMediumText size={15} style={styles.backText}>
-            ← Atrás
-          </RoboMediumText>
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        {/* Hero Image */}
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: notice.image }} style={styles.heroImage} resizeMode="cover" />
-          <View style={styles.imageBadge}>
-            <RoboMediumText size={11} style={styles.imageBadgeText}>
-              {notice.category}
-            </RoboMediumText>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton} activeOpacity={0.7}>
+              <RoboExtraBoldText size={22} style={styles.backArrow}>{'‹  '}</RoboExtraBoldText>
+              <RoboRegularText size={15} style={styles.backText}>Atrás</RoboRegularText>
+            </TouchableOpacity>
           </View>
+
+          {/* Scrollable content */}
+          <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            {/* Hero Image */}
+            <View style={styles.imageContainer}>
+              <Image source={{ uri: notice.image }} style={styles.image} resizeMode="cover" />
+              <View style={styles.imageBadge}>
+                <RoboSemiBoldText size={11} style={styles.imageBadgeText}>
+                  {notice.category}
+                </RoboSemiBoldText>
+              </View>
+            </View>
+
+            {/* Title + date */}
+            <View style={styles.titleRow}>
+              <RoboRegularText size={12} style={styles.date}>
+                {notice.date}
+              </RoboRegularText>
+              <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={3} size={22} style={styles.title}>
+                {notice.title}
+              </RoboExtraBoldText>
+            </View>
+
+            {/* Divider */}
+            <View style={styles.divider} />
+
+            {/* Body */}
+            <View style={styles.section}>
+              <RoboRegularText size={15} style={styles.body}>
+                {notice.fullDescription}
+              </RoboRegularText>
+            </View>
+
+          </ScrollView>
         </View>
-
-        {/* Content */}
-        <View style={styles.content}>
-          <RoboRegularText size={12} style={styles.date}>
-            {notice.date}
-          </RoboRegularText>
-
-          <RoboExtraBoldText size={22} style={styles.title}>
-            {notice.title}
-          </RoboExtraBoldText>
-
-          <View style={styles.divider} />
-
-          <RoboRegularText size={15} style={styles.body}>
-            {notice.fullDescription}
-          </RoboRegularText>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </React.Fragment>
   );
 };
 
 export default NoticeDetailScreen;
 
 const styles = StyleSheet.create({
-  safeArea: {
+  safeareaContainer: {
     flex: 1,
-    backgroundColor: GlobalColors.cream,
+    backgroundColor: GlobalColors.white,
+  },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: GlobalColors.white,
   },
   header: {
-    paddingHorizontal: width * 0.05,
+    width: '90%',
+    alignSelf: 'center',
     paddingVertical: 12,
-    backgroundColor: GlobalColors.cream,
   },
   backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'flex-start',
+    gap: 2,
+  },
+  backArrow: {
+    color: GlobalColors.navyDeep,
+    lineHeight: 26,
   },
   backText: {
-    color: GlobalColors.blueElegant,
+    color: GlobalColors.navyDeep,
+  },
+  scrollView: {
+    flex: 1,
+    width: '90%',
+    alignSelf: 'center',
   },
   scrollContent: {
-    paddingBottom: height * 0.05,
+    paddingBottom: 30,
   },
   imageContainer: {
-    width: '100%',
+    width: '90%',
     height: height * 0.28,
-    position: 'relative',
+    alignSelf: 'center',
+    borderRadius: 18,
+    overflow: 'hidden',
+    backgroundColor: GlobalColors.blueSoft,
+    marginBottom: 20,
   },
-  heroImage: {
+  image: {
     width: '100%',
     height: '100%',
   },
   imageBadge: {
     position: 'absolute',
     bottom: 14,
-    left: width * 0.05,
+    left: 14,
     backgroundColor: GlobalColors.navyDeep,
-    borderRadius: 8,
+    borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 5,
   },
   imageBadgeText: {
     color: GlobalColors.white,
   },
-  content: {
-    paddingHorizontal: width * 0.05,
-    paddingTop: 20,
+  titleRow: {
+    width: '90%',
+    alignSelf: 'center',
+    marginBottom: 14,
+    gap: 6,
   },
   date: {
     color: GlobalColors.gray8,
-    marginBottom: 8,
   },
   title: {
     color: GlobalColors.navyDeep,
     lineHeight: 30,
-    letterSpacing: -0.3,
   },
   divider: {
+    width: '90%',
+    alignSelf: 'center',
     height: 1,
-    backgroundColor: GlobalColors.marbleGray,
-    marginVertical: 18,
+    backgroundColor: GlobalColors.gray5,
+    marginBottom: 18,
+  },
+  section: {
+    width: '90%',
+    alignSelf: 'center',
   },
   body: {
-    color: GlobalColors.charcoalSoft,
+    color: GlobalColors.black3,
     lineHeight: 24,
   },
 });
