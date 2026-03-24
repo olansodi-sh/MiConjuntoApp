@@ -18,17 +18,19 @@ const ReservationsCards = ({ data }: any) => {
             {data.name}
           </RoboBoldText>
         </View>
-        <View style={{...style.containerButtons}}>
+        <View style={[style.containerButtons, !data.hasform && style.containerButtonsCentered]}>
           <TouchableOpacity activeOpacity={0.8} style={{...style.showDetailsButton}}>
             <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} style={{...style.showDetailsText}} size={14}>
               Ver detalles
             </RoboExtraBoldText>
           </TouchableOpacity>
-          <TouchableOpacity style={{...style.reservationButton}}>
-            <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} style={{...style.reservationText}} size={14}>
-              Reservar
-            </RoboExtraBoldText>
-          </TouchableOpacity>
+          {data.hasform && (
+            <TouchableOpacity style={{...style.reservationButton}}>
+              <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} style={{...style.reservationText}} size={14}>
+                Reservar
+              </RoboExtraBoldText>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
     </View>
@@ -70,6 +72,9 @@ const style = StyleSheet.create({
     height: '70%',
     alignItems: 'center',
     justifyContent: 'space-around',
+	},
+	containerButtonsCentered: {
+    justifyContent: 'center',
 	},
 	showDetailsButton: {
 		width: '90%',

@@ -31,10 +31,10 @@ const CommonsTab = ({ route }: any) => {
         )}
         contentContainerStyle={{
           width: '100%',
-          alignItems: 'center',  // centra los items horizontalmente
-          paddingVertical: 10,   // opcional, para separación superior/inferior
+          alignItems: 'center',
+          paddingVertical: 10,
         }}
-        showsVerticalScrollIndicator={false} // opcional
+        showsVerticalScrollIndicator={false}
         />
     </View>
   );

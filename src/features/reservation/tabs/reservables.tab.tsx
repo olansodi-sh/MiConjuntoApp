@@ -31,10 +31,10 @@ const ReservablesTab = ({ route }: any) => {
         )}
         contentContainerStyle={{
           width: '100%',
-          alignItems: 'center',  // centra los items horizontalmente
-          paddingVertical: 10,   // opcional, para separación superior/inferior
+          paddingVertical: 10,
+          alignItems: 'center',
         }}
-        showsVerticalScrollIndicator={false} // opcional
+        showsVerticalScrollIndicator={false}
         />
     </View>
   );
