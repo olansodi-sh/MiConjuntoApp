@@ -12,7 +12,7 @@ const Tab = createMaterialTopTabNavigator();
 const ReceptionScreen = () => {
   return (
     <React.Fragment>
-      <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.white} />
+      <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.cream} />
       <SafeAreaView style={styles.safeareaContainer} edges={['top', 'left', 'right']}>
         <View style={styles.mainContainer}>
           <View style={styles.titleContainer}>
@@ -36,7 +36,7 @@ const ReceptionScreen = () => {
                   borderRadius: 2,
                 },
                 tabBarStyle: {
-                  backgroundColor: GlobalColors.white,
+                  backgroundColor: GlobalColors.cream,
                   elevation: 0,
                   shadowOpacity: 0,
                   borderBottomWidth: 1,
@@ -85,11 +85,11 @@ export default ReceptionScreen;
 const styles = StyleSheet.create({
   safeareaContainer: {
     flex: 1,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
   titleContainer: {
     width: '90%',
@@ -100,12 +100,12 @@ const styles = StyleSheet.create({
   },
   titleText: {
     alignSelf: 'center',
-    color: 'black',
+    color: GlobalColors.navyDeep,
   },
   subtitleText: {
     alignSelf: 'center',
     marginTop: '3%',
-    color: GlobalColors.black3,
+    color: GlobalColors.charcoalSoft,
     textAlign: 'center',
     width: '90%',
   },

@@ -14,6 +14,6 @@ export default EntriesTab;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
 });

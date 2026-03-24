@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 6,
     alignItems: 'center',
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
   myReservationsButton:{
     width: '90%', 

@@ -2,9 +2,10 @@ import { View, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParamList } from '../../navigation/home-stack.navigation';
-import RoboExtraBoldText from '../texts/robo-extrabold.text';
 import { GlobalColors } from '../../theme/global.colors';
 import RoboBoldText from '../texts/robo-bold.text';
+import RoboSemiBoldText from '../texts/robo-semibold.text';
+import RoboRegularText from '../texts/robo-regular.text';
 import React from 'react';
 
 type CardNavProp = StackNavigationProp<HomeStackParamList>;
@@ -15,102 +16,103 @@ const ReservationsCards = ({ data, showReserveButton = false }: any) => {
   const navigation = useNavigation<CardNavProp>();
 
   return (
-    <View style={{...style.cardContainer}}>
-      <View style={{...style.imageContainer}}>
-        <Image source={{ uri: data.image }} style={{ width: '100%', height: '100%' }} resizeMode="contain"/>
-      </View>
-      <View style={{...style.infoContainer}}>
-        <View style={{...style.titleContainer}}>
-          <RoboBoldText adjustsFontSizeToFit numberOfLines={2} style={{...style.titleText}} size={16}>
-            {data.name}
-          </RoboBoldText>
-        </View>
-        <View style={[style.containerButtons, !showReserveButton && style.containerButtonsCentered]}>
-          <TouchableOpacity activeOpacity={0.8} style={{...style.showDetailsButton}} onPress={() => navigation.navigate('ShowZoneDetailsScreen', { zone: data, isReservable: showReserveButton })}>
-            <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} style={{...style.showDetailsText}} size={14}>
+    <TouchableOpacity
+      activeOpacity={0.92}
+      style={styles.cardContainer}
+      onPress={() => navigation.navigate('ShowZoneDetailsScreen', { zone: data, isReservable: showReserveButton })}
+    >
+      <Image
+        source={{ uri: data.image }}
+        style={styles.cardImage}
+        resizeMode="cover"
+      />
+      <View style={styles.infoContainer}>
+        <RoboBoldText numberOfLines={2} style={styles.titleText} size={15}>
+          {data.name}
+        </RoboBoldText>
+
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.detailsButton}
+            onPress={() => navigation.navigate('ShowZoneDetailsScreen', { zone: data, isReservable: showReserveButton })}
+          >
+            <RoboSemiBoldText size={13} style={styles.detailsText}>
               Ver detalles
-            </RoboExtraBoldText>
+            </RoboSemiBoldText>
           </TouchableOpacity>
+
           {showReserveButton && (
-            <TouchableOpacity style={{...style.reservationButton}} onPress={() => navigation.navigate('CreateZoneReservationScreen', { zone: data })}>
-              <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} style={{...style.reservationText}} size={14}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              style={styles.reserveButton}
+              onPress={() => navigation.navigate('CreateZoneReservationScreen', { zone: data })}
+            >
+              <RoboSemiBoldText size={13} style={styles.reserveText}>
                 Reservar
-              </RoboExtraBoldText>
+              </RoboSemiBoldText>
             </TouchableOpacity>
           )}
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
 export default ReservationsCards;
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   cardContainer: {
-		borderWidth: 1,
-    borderRadius: 15,
-    marginVertical: 8,
-    width: width * 0.9,
-    height: height * 0.2,
     flexDirection: 'row',
-    justifyContent: 'center',
-    borderColor: GlobalColors.gray5,
+    width: width * 0.9,
+    marginVertical: 6,
+    borderRadius: 16,
+    overflow: 'hidden',
+    backgroundColor: GlobalColors.white,
+    borderWidth: 1,
+    borderColor: GlobalColors.marbleGray,
+    shadowColor: GlobalColors.navyDeep,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 8,
+    elevation: 3,
   },
-	imageContainer: {
-		width: '45%',
-		height: '100%',
-	},
-	infoContainer: {
-		width: '45%', 
-		height: '100%',
-	},
-	titleContainer: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		width: '100%', height: '30%',
-	},
-	titleText:{
-		alignSelf: 'center',
-		color: GlobalColors.navyDeep,
-	},
-	containerButtons: {
-    width: '100%',
-    height: '70%',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-	},
-	containerButtonsCentered: {
-    justifyContent: 'center',
-	},
-	showDetailsButton: {
-		width: '90%',
-    borderWidth: 1,
+  cardImage: {
+    width: '38%',
+    minHeight: height * 0.15,
+  },
+  infoContainer: {
+    flex: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    justifyContent: 'space-between',
+  },
+  titleText: {
+    color: GlobalColors.navyDeep,
+    lineHeight: 20,
+    marginBottom: 10,
+  },
+  buttonsContainer: {
+    gap: 8,
+  },
+  detailsButton: {
+    borderWidth: 1.5,
     borderRadius: 10,
     alignItems: 'center',
-    height: height * 0.05,
-    alignContent: 'center',
-    justifyContent: 'center',
-    borderColor: GlobalColors.gray5,
-    backgroundColor: GlobalColors.blueSoftV2,
-	},
-	showDetailsText: {
-		alignSelf: 'center',
-		color: GlobalColors.navyDeep,
-	},
-	reservationButton: {
-		width: '90%',
-    borderWidth: 1,
+    paddingVertical: 7,
+    borderColor: GlobalColors.navyDeep,
+    backgroundColor: GlobalColors.white,
+  },
+  detailsText: {
+    color: GlobalColors.navyDeep,
+  },
+  reserveButton: {
     borderRadius: 10,
     alignItems: 'center',
-    height: height * 0.05,
-    alignContent: 'center',
-    justifyContent: 'center',
-    borderColor: GlobalColors.gray5,
-    backgroundColor: GlobalColors.greenSoft,
-	},
-	reservationText:{
-		alignSelf: 'center',
-		color: GlobalColors.navyDeep,
-	},
+    paddingVertical: 7,
+    backgroundColor: GlobalColors.navyDeep,
+  },
+  reserveText: {
+    color: GlobalColors.white,
+  },
 });

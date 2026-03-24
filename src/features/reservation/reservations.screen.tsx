@@ -16,11 +16,11 @@ const dataDummie: ReservationZonesByType = {
   reservations: [
     {
       id: 1,
-      name: 'kiosko asd asd asd',
+      name: 'Kiosko',
       hasform: true,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=300&fit=crop',
       rules: [
         'No se permiten bebidas alcohólicas',
         'No se permiten alimentos',
@@ -32,7 +32,7 @@ const dataDummie: ReservationZonesByType = {
       hasform: true,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop',
       rules: [
         'No se permiten bebidas alcohólicas',
         'No se permiten alimentos',
@@ -44,7 +44,7 @@ const dataDummie: ReservationZonesByType = {
       hasform: true,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop',
       rules: [
         'No se permiten bebidas alcohólicas',
         'No se permiten alimentos',
@@ -56,7 +56,7 @@ const dataDummie: ReservationZonesByType = {
       hasform: true,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      image: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=400&h=300&fit=crop',
       rules: [
         'No se permiten bebidas alcohólicas',
         'No se permiten alimentos',
@@ -66,11 +66,11 @@ const dataDummie: ReservationZonesByType = {
   commons: [
     {
       id: 1,
-      name: 'Psicina',
+      name: 'Piscina',
       hasform: true,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      image: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=400&h=300&fit=crop',
       rules: [
         'No se permiten bebidas alcohólicas',
         'No se permiten alimentos',
@@ -82,7 +82,7 @@ const dataDummie: ReservationZonesByType = {
       hasform: false,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      image: 'https://images.unsplash.com/photo-1511882150382-421056c89033?w=400&h=300&fit=crop',
       rules: [
         'No se permiten bebidas alcohólicas',
         'No se permiten alimentos',
@@ -94,7 +94,7 @@ const dataDummie: ReservationZonesByType = {
       hasform: false,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
-      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop',
       rules: [
         'No se permiten bebidas alcohólicas',
         'No se permiten alimentos',
@@ -109,7 +109,7 @@ const ReservationsScreen = () => {
 
   return (
     <React.Fragment>
-      <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.white} />
+      <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.cream} />
       <SafeAreaView style={styles.safeareaContainer} edges={['top', 'left', 'right']}>
         <View style={styles.mainContainer}>
           <View style={styles.titleContainer}>
@@ -133,7 +133,7 @@ const ReservationsScreen = () => {
                   borderRadius: 2,
                 },
                 tabBarStyle: {
-                  backgroundColor: GlobalColors.white,
+                  backgroundColor: GlobalColors.cream,
                   elevation: 0,
                   shadowOpacity: 0,
                   borderBottomWidth: 1,
@@ -190,11 +190,11 @@ export default ReservationsScreen;
 const styles = StyleSheet.create({
   safeareaContainer: {
     flex: 1,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
   titleContainer: {
     flex: 1.5,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   titleText: {
-    color: 'black',
+    color: GlobalColors.navyDeep,
     alignSelf: 'center',
   },
   subtitleText: {
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     alignItems: 'center',
-    color: GlobalColors.black3,
+    color: GlobalColors.charcoalSoft,
   },
   tabsContainer: {
     flex: 8.5,
