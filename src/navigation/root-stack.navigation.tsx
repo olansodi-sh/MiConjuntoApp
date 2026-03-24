@@ -7,7 +7,7 @@ import LoginScreen from "../features/login/login.screen";
 const Stack = createStackNavigator();
 
 const RootStackNavigation = () => {
-  const token = false;
+  const token = true;
   const isLoading = false;
 
   return (

@@ -31,17 +31,17 @@ const LoginScreen = () => {
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{...styles.keyboardContainer}} onLayout={onLayout}>
           <View style={{...styles.contentContainer}}>
             {/* top */}
-            <View style={{width: windowWidth, height: windowHeight * 0.40, flexShrink: 1, backgroundColor:GlobalColors.white }}>
+            <View style={{width: windowWidth, height: windowHeight * 0.40, flexShrink: 1, backgroundColor: GlobalColors.cream }}>
               <Image blurRadius={0.9} resizeMode="cover" source={require('../../../public/images/loginBackground.png')}  style={{width: '100%', height: '100%'}} />
             </View>
             {/* bottom */}
             <View style={{...styles.bottomSection }}>
 
-              <View style={{width:'100%', height:'27%', alignItems: 'center', justifyContent: 'center'}}>
-                <RoboBoldText size={25} style={{alignSelf: 'center', color: 'black'}}>
+              <View style={{width:'90%', height:'27%', alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}}>
+                <RoboBoldText size={25} style={{alignSelf: 'center', color: GlobalColors.navyDeep}}>
                   ¡Bienvenido de nuevo!
                 </RoboBoldText>
-                <RoboRegularText size={15} numberOfLines={2} style={{ alignSelf: 'center', marginTop:'3%', color: GlobalColors.sageGreen, alignItems: 'center', textAlign: 'center', width: '90%'}}>
+                <RoboRegularText size={15} numberOfLines={2} style={{ alignSelf: 'center', marginTop:'3%', color: GlobalColors.charcoalSoft, alignItems: 'center', textAlign: 'center', width: '90%'}}>
                   Conéctate con tu comunidad y mantente al día
                 </RoboRegularText>
               </View>
@@ -52,7 +52,7 @@ const LoginScreen = () => {
                   <MainInput
                     renderLabel
                     textLabel="Usuario"
-                    containerStyles={{ width: '100%',height:'15%' }}
+                    containerStyles={{ width: '90%',height:'15%' }}
                     placeholder="Escribe tu usuario..."
                     value={usuario}
                     onChangeText={setUsuario}
@@ -63,7 +63,7 @@ const LoginScreen = () => {
                   />
                   <MainInput
                     renderLabel
-                    containerStyles={{ width: '100%',height:'15%' }}
+                    containerStyles={{ width: '90%',height:'15%' }}
                     textLabel="Contraseña"
                     placeholder="••••••••"
                     value={password}
@@ -82,29 +82,29 @@ const LoginScreen = () => {
                   />
                 </View>
               
-                <View style={{width:'90%', height:'20%', flexDirection:'row' }}>
+                <View style={{width:'80%', height:'20%', flexDirection:'row' }}>
                   <View style={{width:'50%', height:'100%', flexDirection:'row'}}>
                      <BouncyCheckbox
                       isChecked={isChecked}
                       disableText
                       size={20}
                       useBuiltInState={false}
-                      fillColor={GlobalColors.bluePrimary}
+                      fillColor={GlobalColors.navyDeep}
                       unFillColor={'transparent'}
-                      iconStyle={{borderColor: 'green'}}
+                      iconStyle={{borderColor: GlobalColors.navyDeep}}
                       onPress={(checked: boolean) => {
                             // These two should be same value
                             console.log('::Checked::', checked);
                             console.log('::LocalChecked::', isChecked);
                             setIsChecked(!isChecked);
                       }} />
-                      <RoboRegularText size={14} style={{color: GlobalColors.gray2, alignSelf:'center', marginLeft: 5}}>
+                      <RoboRegularText adjustsFontSizeToFit size={13} style={{color: GlobalColors.charcoalSoft, alignSelf:'center', marginLeft: 5}}>
                         Recordar usuario
                       </RoboRegularText>
                   </View>
                   <View style={{width:'50%', height:'100%' }}>
                      <TouchableOpacity activeOpacity={0.6} style={{alignSelf:'flex-end', justifyContent:'center', height:'100%'}}>
-                        <RoboRegularText size={14} style={{color: GlobalColors.gray2}}>
+                        <RoboRegularText adjustsFontSizeToFit size={13} style={{color: GlobalColors.charcoalSoft}}>
                           ¿Olvidaste tu contraseña?
                         </RoboRegularText>
                      </TouchableOpacity>
@@ -113,7 +113,7 @@ const LoginScreen = () => {
               </View>
 
               <View style={{width:'100%', height:'25%', justifyContent: 'center', alignItems: 'center' }}>
-                <MainButton buttonStyle={{ backgroundColor: GlobalColors.bluePrimary,width: '90%' }} textSize={18} textStyle={{color: GlobalColors.white }} text={'Iniciar sesión'}/>
+                <MainButton buttonStyle={{ backgroundColor: GlobalColors.navyDeep, width: '90%' }} textSize={18} textStyle={{color: GlobalColors.white }} text={'Iniciar sesión'}/>
               </View>
 
 
@@ -132,23 +132,23 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
   safeareaContainer:{
-    flex: 1, 
-    backgroundColor: GlobalColors.white,
+    flex: 1,
+    backgroundColor: GlobalColors.cream,
   },
   keyboardContainer:{
     flex: 1,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
   contentContainer:{
     flex: 1,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
   },
   bottomSection: {
     position: 'absolute',
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
     bottom: 0,
-    backgroundColor: GlobalColors.white,
+    backgroundColor: GlobalColors.cream,
     width: windowWidth,
     height: windowHeight * 0.65
   },
