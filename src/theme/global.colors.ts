@@ -14,6 +14,7 @@ export const GlobalColors = {
   blueElegant: '#2C4A77',    // azul medio elegante
   slateBlue: '#5A7A9A',      // azul grisáceo para fondos secundarios
   blueSoft: '#E8F0FA',       // azul muy claro para cards/info
+  blueSoftV2: '#bce7f0',
 
   bluePrimary:'#3b65c9',
 
@@ -23,6 +24,7 @@ export const GlobalColors = {
   emeraldSoft: '#4A8C76',    // verde esmeralda sutil
   greenSuccess: '#6BA97A',   // success más elegante que #66bb6a
   mintLight: '#E8F5F0',      // fondo verde muy claro
+  greenSoft:'#cfe9bc',
 
   // Rojos / Burdeos (alertas, acentos de energía sin ser agresivo)
   burgundyElegant: '#5C2D3D', // burdeos profundo (muy luxury 2026)

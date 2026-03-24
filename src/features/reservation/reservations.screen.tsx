@@ -1,19 +1,20 @@
-import { View, Text, StatusBar, StyleSheet } from 'react-native';
-import React from 'react';
-import { GlobalColors } from '../../theme/global.colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { RoboExtraBoldText, RoboRegularText } from '../../components';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { RoboExtraBoldText, RoboRegularText } from '../../components';
+import { View, Text, StatusBar, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ReservationZonesByType } from './reservation.types';
+import { GlobalColors } from '../../theme/global.colors';
 import ReservablesTab from './tabs/reservables.tab';
 import CommonsTab from './tabs/commons.tab';
+import React from 'react';
 
 const Tab = createMaterialTopTabNavigator();
 
-const dataDummie = {
+const dataDummie: ReservationZonesByType = {
   reservations: [
     {
       id: 1,
-      name: 'kiosko',
+      name: 'kiosko asd asd asd',
       hasform: true,
       description:
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
@@ -47,6 +48,18 @@ const dataDummie = {
         'No se permiten alimentos',
       ],
     },
+    {
+      id: 4,
+      name: 'Salón de eventos',
+      hasform: true,
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.',
+      image: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+      rules: [
+        'No se permiten bebidas alcohólicas',
+        'No se permiten alimentos',
+      ],
+    }
   ],
   commons: [
     {
@@ -109,6 +122,7 @@ const ReservationsScreen = () => {
           <View style={styles.tabsContainer}>
             <Tab.Navigator
               screenOptions={{
+                swipeEnabled: false,
                 tabBarActiveTintColor: GlobalColors.navyDeep,
                 tabBarInactiveTintColor: GlobalColors.gray2,
                 tabBarIndicatorStyle: {
@@ -134,6 +148,7 @@ const ReservationsScreen = () => {
               <Tab.Screen
                 name="Reservables"
                 component={ReservablesTab}
+                initialParams={{ zones: dataDummie.reservations }}
                 options={{
                   tabBarLabel: ({ color }) => (
                     <View style={styles.tabLabelContainer}>
@@ -148,6 +163,7 @@ const ReservationsScreen = () => {
               <Tab.Screen
                 name="Comunes"
                 component={CommonsTab}
+                initialParams={{ zones: dataDummie.commons }}
                 options={{
                   tabBarLabel: ({ color }) => (
                     <View style={styles.tabLabelContainer}>
