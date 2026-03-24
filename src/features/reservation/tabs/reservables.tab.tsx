@@ -27,7 +27,7 @@ const ReservablesTab = ({ route }: any) => {
         data={zones}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <ReservationsCards data={item} />
+          <ReservationsCards data={item} showReserveButton={true} />
         )}
         contentContainerStyle={{
           width: '100%',

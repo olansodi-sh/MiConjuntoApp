@@ -1,12 +1,19 @@
 import { View, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { HomeStackParamList } from '../../navigation/home-stack.navigation';
 import RoboExtraBoldText from '../texts/robo-extrabold.text';
 import { GlobalColors } from '../../theme/global.colors';
 import RoboBoldText from '../texts/robo-bold.text';
 import React from 'react';
 
+type CardNavProp = StackNavigationProp<HomeStackParamList>;
+
 const { width, height } = Dimensions.get('window');
 
-const ReservationsCards = ({ data }: any) => {
+const ReservationsCards = ({ data, showReserveButton = false }: any) => {
+  const navigation = useNavigation<CardNavProp>();
+
   return (
     <View style={{...style.cardContainer}}>
       <View style={{...style.imageContainer}}>
@@ -18,14 +25,14 @@ const ReservationsCards = ({ data }: any) => {
             {data.name}
           </RoboBoldText>
         </View>
-        <View style={[style.containerButtons, !data.hasform && style.containerButtonsCentered]}>
-          <TouchableOpacity activeOpacity={0.8} style={{...style.showDetailsButton}}>
+        <View style={[style.containerButtons, !showReserveButton && style.containerButtonsCentered]}>
+          <TouchableOpacity activeOpacity={0.8} style={{...style.showDetailsButton}} onPress={() => navigation.navigate('ShowZoneDetailsScreen', { zone: data, isReservable: showReserveButton })}>
             <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} style={{...style.showDetailsText}} size={14}>
               Ver detalles
             </RoboExtraBoldText>
           </TouchableOpacity>
-          {data.hasform && (
-            <TouchableOpacity style={{...style.reservationButton}}>
+          {showReserveButton && (
+            <TouchableOpacity style={{...style.reservationButton}} onPress={() => navigation.navigate('CreateZoneReservationScreen', { zone: data })}>
               <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} style={{...style.reservationText}} size={14}>
                 Reservar
               </RoboExtraBoldText>
