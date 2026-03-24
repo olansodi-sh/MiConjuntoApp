@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { View, Text, StatusBar, StyleSheet, Dimensions } from 'react-native';
 import { RoboExtraBoldText, RoboRegularText } from '../../components';
-import { View, Text, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ReservationZonesByType } from './reservation.types';
 import { GlobalColors } from '../../theme/global.colors';
@@ -9,6 +9,8 @@ import CommonsTab from './tabs/commons.tab';
 import React from 'react';
 
 const Tab = createMaterialTopTabNavigator();
+
+const { width, height } = Dimensions.get('window');
 
 const dataDummie: ReservationZonesByType = {
   reservations: [
@@ -195,47 +197,47 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalColors.white,
   },
   titleContainer: {
+    flex: 1.5,
     width: '90%',
     alignSelf: 'center',
-    flex: 1.5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   titleText: {
-    alignSelf: 'center',
     color: 'black',
+    alignSelf: 'center',
   },
   subtitleText: {
-    alignSelf: 'center',
-    marginTop: '3%',
-    color: GlobalColors.black3,
-    alignItems: 'center',
-    textAlign: 'center',
     width: '90%',
+    marginTop: '3%',
+    textAlign: 'center',
+    alignSelf: 'center',
+    alignItems: 'center',
+    color: GlobalColors.black3,
   },
   tabsContainer: {
     flex: 8.5,
   },
   tabLabelContainer: {
+    gap: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
   },
   tabLabelText: {
     fontSize: 13,
     fontFamily: 'Roboto-SemiBold',
   },
   badge: {
-    borderRadius: 10,
     minWidth: 20,
-    height: 20,
+    borderRadius: 10,
+    height: height*0.02,
     paddingHorizontal: 5,
     alignItems: 'center',
     justifyContent: 'center',
   },
   badgeText: {
-    color: GlobalColors.white,
     fontSize: 11,
+    color: GlobalColors.white,
     fontFamily: 'Roboto-Bold',
   },
 });

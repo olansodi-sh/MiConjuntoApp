@@ -3,7 +3,7 @@ import React from "react";
 import HomeScreen from "../features/home/home.screen";
 import ProfileScreen from "../features/profile/profile.screen";
 import ReservationsScreen from "../features/reservation/reservations.screen";
-import ReceptionScreen from "../features/packagedelivery/reception.screen";
+import ReceptionScreen from "../features/reception/reception.screen";
 
 
 export type BottomTabParamList = {
