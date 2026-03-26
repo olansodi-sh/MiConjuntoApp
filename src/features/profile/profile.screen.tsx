@@ -7,6 +7,7 @@ import RoboBoldText from '../../components/texts/robo-bold.text';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GlobalColors } from '../../theme/global.colors';
 import React, { useState } from 'react';
+import { useAuthStore } from '../login/store/auth.store';
 
 const { width, height } = Dimensions.get('window');
 
@@ -34,40 +35,67 @@ const InfoRow = ({ label, value }: { label: string; value: string }) => (
 
 const ProfileScreen = () => {
   const [qrVisible, setQrVisible] = useState(false);
+  const { user, logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch {
+      // Ignored
+    }
+  };
+
+  // Helper to get consistent display data
+  const profileData = {
+    name: user ? `${user.name} ${user.lastName}` : 'Usuario',
+    email: (user?.type === 'resident' ? (user as any)?.email : (user as any)?.username) || 'N/A',
+    document: (user as any)?.document || 'N/A',
+    torre: (user as any)?.torre || (user as any)?.residentTypeLabel || 'N/A',
+    apto: (user as any)?.apto || 'N/A',
+    initials: (user?.name?.charAt(0) || '') + (user?.lastName?.charAt(0) || 'U'),
+    upToDate: true, // This could come from API in the future
+  };
 
   return (
     <React.Fragment>
       <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.cream} />
       <SafeAreaView style={styles.safeareaContainer} edges={['top', 'left', 'right']}>
       <View style ={{...styles.mainContainer}}>
-          <View style={{...styles.titleContainer}}>
-            <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} size={25} style={styles.titleText}>
-              Mi Perfil
-            </RoboExtraBoldText>
-            <RoboRegularText size={15} numberOfLines={2} style={styles.subtitleText}>
-              Consulta y gestiona tu información de residente
-            </RoboRegularText>
+          <View style={styles.headerContainer}>
+            <View style={styles.headerRow}>
+              <View style={styles.titleWrapper}>
+                <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} size={25} style={styles.titleText}>
+                  Mi Perfil
+                </RoboExtraBoldText>
+                <RoboRegularText size={15} numberOfLines={2} style={styles.subtitleText}>
+                  Consulta y gestiona tu información
+                </RoboRegularText>
+              </View>
+              <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+                <RoboBoldText size={12} style={styles.logoutText}>SALIR</RoboBoldText>
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View style={{flex: 8.5, backgroundColor: GlobalColors.cream}}>
             <View style={styles.avatarSection}>
               <View style={styles.avatarCircle}>
                 <RoboExtraBoldText size={32} style={styles.avatarInitials}>
-                  {DUMMY_USER.initials}
+                  {profileData.initials}
                 </RoboExtraBoldText>
               </View>
-
+ 
               <RoboBoldText size={20} style={styles.userName}>
-                {DUMMY_USER.name}
+                {profileData.name}
               </RoboBoldText>
-
+ 
               <RoboRegularText size={14} style={styles.userLocation}>
-                Torre {DUMMY_USER.torre} · Apto {DUMMY_USER.apto}
+                {user?.type === 'resident' ? `Torre ${profileData.torre} · Apto ${profileData.apto}` : profileData.torre}
               </RoboRegularText>
-
-              <View style={[styles.statusBadge, DUMMY_USER.upToDate ? styles.statusGreen : styles.statusRed]}>
-                <RoboSemiBoldText size={12} style={DUMMY_USER.upToDate ? styles.statusTextGreen : styles.statusTextRed}>
-                  {DUMMY_USER.upToDate ? '✓  Al día con administración' : '✗  Pendiente de pago'}
+ 
+              <View style={[styles.statusBadge, profileData.upToDate ? styles.statusGreen : styles.statusRed]}>
+                <RoboSemiBoldText size={12} style={profileData.upToDate ? styles.statusTextGreen : styles.statusTextRed}>
+                  {profileData.upToDate ? '✓  Al día con administración' : '✗  Pendiente de pago'}
                 </RoboSemiBoldText>
               </View> 
             </View>
@@ -77,11 +105,11 @@ const ProfileScreen = () => {
                 INFORMACIÓN PERSONAL
               </RoboBoldText>
               <View style={styles.divider} />
-              <InfoRow label="Documento" value={DUMMY_USER.document} />
+              <InfoRow label="Documento" value={profileData.document} />
               <View style={styles.rowSeparator} />
-              <InfoRow label="Email" value={DUMMY_USER.email} />
+              <InfoRow label="Email" value={profileData.email} />
               <View style={styles.rowSeparator} />
-              <InfoRow label="Teléfono" value={DUMMY_USER.phone} />
+              <InfoRow label="Tipo" value={user?.type === 'employee' ? 'Empleado' : 'Residente'} />
             </View>
 
             <View style={styles.infoCard}>
@@ -345,5 +373,31 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: GlobalColors.blueElegant,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
+    justifyContent: 'space-between',
+  },
+  headerContainer: {
+    flex: 1.5,
+    width: '90%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleWrapper: {
+    flex: 1,
+  },
+  logoutButton: {
+    backgroundColor: GlobalColors.blushElegant,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
+  },
+  logoutText: {
+    color: GlobalColors.burgundyElegant,
+    letterSpacing: 1,
   },
 });
