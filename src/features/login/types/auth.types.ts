@@ -13,6 +13,7 @@ export interface ResidentUser extends BaseUser {
     document: string;
     residentType: string;
     residentTypeLabel: string;
+    apartmentId?: string;
 }
 
 export interface EmployeeUser extends BaseUser {
@@ -23,6 +24,37 @@ export interface EmployeeUser extends BaseUser {
 }
 
 export type User = ResidentUser | EmployeeUser;
+
+export interface Tower {
+    id: string;
+    code: string;
+    name: string;
+    totalFloors: number;
+    apartmentsPerFloor: number;
+    isActive: boolean;
+    createdAt: string;
+}
+
+export interface Apartment {
+    id: string;
+    number: string;
+    tower: string;
+    towerData: Tower;
+    towerId: string;
+    floor: number;
+    area: any;
+    createdAt: string;
+}
+
+export interface ResidentApartment {
+    id: string;
+    residentId: string;
+    apartment: Apartment;
+    apartmentId: string;
+    startDate: string | null;
+    endDate: string | null;
+    createdAt: string;
+}
 
 export interface LoginRequest {
     // Para residente suele ser identifier o email, para empleado username
@@ -41,4 +73,5 @@ export interface AuthState {
     isAuthenticated: boolean;
     isLoading: boolean;
     error: string | null;
+    myApartments: ResidentApartment[] | null;
 }

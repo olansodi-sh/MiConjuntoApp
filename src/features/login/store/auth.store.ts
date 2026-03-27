@@ -1,7 +1,8 @@
+
 import { create } from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { AuthState } from '../types/auth.types';
+import { AuthState, ResidentApartment } from '../types/auth.types';
 import { AuthApi } from '../api/auth.api';
 import { baseApi } from '../../../api/base.api';
 import TokenManager from '../../../utils/token.manager';
@@ -29,13 +30,12 @@ interface AuthActions {
 }
 
 const initialState: AuthState & { rememberedUser: { user: string, type: 'employee' | 'resident' } | null } = {
-  ...{
-    user: null,
-    accessToken: null,
-    isAuthenticated: false,
-    isLoading: false,
-    error: null,
-  },
+  user: null,
+  accessToken: null,
+  isAuthenticated: false,
+  isLoading: false,
+  error: null,
+  myApartments: null,
   rememberedUser: null,
 };
 
@@ -95,6 +95,28 @@ export const useAuthStore = create<AuthState & AuthActions & { rememberedUser: {
             isLoading: false,
             error: null,
           });
+
+          // Fetch apartments info after login
+          try {
+            const apartments = await AuthApi.getMyApartments();
+            console.log('User Apartments From /me/apartments:', JSON.stringify(apartments, null, 2));
+            
+            // Store apartments in state
+            set({ myApartments: apartments as ResidentApartment[] });
+
+            // If we find an apartmentId in the response, we ensure it's in our local user state
+            if (apartments && apartments.length > 0) {
+              const mainApartmentId = apartments[0].apartmentId;
+              if (mainApartmentId) {
+                const currentUser = _get().user;
+                if (currentUser) {
+                    set({ user: { ...currentUser, apartmentId: mainApartmentId } as any });
+                }
+              }
+            }
+          } catch (aptError) {
+            console.error('Error fetching apartments after login:', aptError);
+          }
         } catch (error: any) {
           set({
             isLoading: false,
@@ -131,44 +153,50 @@ export const useAuthStore = create<AuthState & AuthActions & { rememberedUser: {
             baseApi.setAuthToken(token);
             TokenManager.setToken(token);
             const user = await AuthApi.getMe();
+            
             set({
               user,
               accessToken: token,
               isAuthenticated: true,
               isLoading: false,
             });
+
+            // If it's a resident, refresh apartments info on restore
+            if (user.type === 'resident') {
+               try {
+                 const apartments = await AuthApi.getMyApartments();
+                 set({ myApartments: apartments as ResidentApartment[] });
+                 
+                 if (apartments && apartments.length > 0) {
+                   const mainApartmentId = apartments[0].apartmentId;
+                   set(state => ({
+                      user: state.user ? { ...state.user, apartmentId: mainApartmentId } as any : null
+                   }));
+                 }
+               } catch (e) {
+                 console.error('Error restoring resident apartments:', e);
+               }
+            }
           } else {
             set({ isLoading: false });
           }
         } catch (error) {
-          console.error('Error restoring session:', error);
-          set({ isLoading: false, isAuthenticated: false, user: null, accessToken: null });
-          TokenManager.clearToken();
           baseApi.removeAuthToken();
+          TokenManager.clearToken();
+          set({ ...initialState, isLoading: false });
         }
       },
     }),
     {
-      name: 'auth-encrypted-storage',
+      name: 'auth-storage',
       storage: createJSONStorage(() => encryptedStorage),
-      // Persist only what's necessary
       partialize: (state) => ({
-        user: state.user,
         accessToken: state.accessToken,
+        user: state.user,
         isAuthenticated: state.isAuthenticated,
         rememberedUser: state.rememberedUser,
+        myApartments: state.myApartments, // Persist apartments list
       }),
-      // Rehydrate API and TokenManager headers
-      onRehydrateStorage: (_state) => {
-        return (hydratedState, error) => {
-          if (error) {
-            console.error('Hydration Error:', error);
-          } else if (hydratedState?.accessToken) {
-            baseApi.setAuthToken(hydratedState.accessToken);
-            TokenManager.setToken(hydratedState.accessToken);
-          }
-        };
-      },
     }
   )
 );

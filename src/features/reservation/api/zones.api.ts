@@ -8,7 +8,6 @@ export class ZonesApi {
      */
     static async getMyReservableZones(): Promise<ReservationZone[]> {
         const response = await baseApi.getAxiosInstance().get<ReservationZone[]>('/v1/common-areas');
-        console.log('getMyReservableZones', response.data);
         return response.data;
     }
 
@@ -25,7 +24,6 @@ export class ZonesApi {
      */
     static async getMyCommonZones(): Promise<ReservationZone[]> {
         const response = await baseApi.getAxiosInstance().get<ReservationZone[]>('/v1/community-spaces');
-        console.log('getMyCommonZones', response.data);
         return response.data;
     }
 

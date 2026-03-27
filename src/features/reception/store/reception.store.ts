@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { ReceptionState, Photo } from '../types/reception.types';
 import { ReceptionApi } from '../api/reception.api';
 import { MEDIA_URL } from '../../../api/base.api';
+import { useAuthStore } from '../../login/store/auth.store';
 
 interface ReceptionActions {
   fetchPackages: () => Promise<void>;
@@ -37,9 +38,16 @@ export const useReceptionStore = create<ReceptionState & ReceptionActions>((set)
   },
 
   fetchAccessLogs: async () => {
+    const apartmentId = (useAuthStore.getState().user as any)?.apartmentId;
+    console.log('apartmentId', apartmentId)
+    if (!apartmentId) {
+      console.warn('No apartmentId found in authStore');
+      return;
+    }
+
     set({ isLoading: true, error: null });
     try {
-      const accessLogs = await ReceptionApi.getAccessLogs();
+      const accessLogs = await ReceptionApi.getAccessLogs(apartmentId);
       set({ accessLogs, isLoading: false });
     } catch (error: any) {
       set({
@@ -66,7 +74,6 @@ export const useReceptionStore = create<ReceptionState & ReceptionActions>((set)
         };
       });
 
-      console.log('Mapped Photos:', mappedPhotos);
       set({ selectedPackagePhotos: mappedPhotos });
       return mappedPhotos;
     } catch (error: any) {

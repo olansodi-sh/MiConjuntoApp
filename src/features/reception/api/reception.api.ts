@@ -13,8 +13,11 @@ export class ReceptionApi {
   /**
    * Get access/visit logs for the current resident/apartment
    */
-  static async getAccessLogs(): Promise<AccessAudit[]> {
-    const response = await baseApi.getAxiosInstance().get<AccessAudit[]>('/v1/access-audit');
+  static async getAccessLogs(apartmentId: string): Promise<AccessAudit[]> {
+    const response = await baseApi.getAxiosInstance().get<AccessAudit[]>('/v1/access-audit/my', {
+      params: { apartmentId }
+    });
+    console.log('response.data', response.data)
     return response.data;
   }
 

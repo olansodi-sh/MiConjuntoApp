@@ -68,6 +68,7 @@ const LoginScreen = () => {
           identifier: usuario,
           password: password,
         }, isChecked);
+        console.log('Login Resident Successful - Apartment info should be in logs');
       }
     } catch (error: any) {
       const message = error.message || 'Error al iniciar sesión';

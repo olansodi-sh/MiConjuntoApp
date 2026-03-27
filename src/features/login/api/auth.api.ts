@@ -1,5 +1,5 @@
 import { baseApi } from "../../../api/base.api";
-import { LoginResponse, User } from "../types/auth.types";
+import { LoginResponse, User, ResidentApartment } from "../types/auth.types";
 
 export class AuthApi {
   /**
@@ -27,22 +27,32 @@ export class AuthApi {
   }
 
   /**
+   * Get resident's apartments
+   */
+  static async getMyApartments(): Promise<ResidentApartment[]> {
+    const response = await baseApi.getAxiosInstance().get<ResidentApartment[]>('/v1/residents/me/apartments');
+    console.log('Apartments:', response.data);
+    return response.data;
+  }
+
+  /**
    * Logout user session (Client-side only as per API docs)
    */
   static async logout(): Promise<void> {
     // No logout endpoint exists on server, we only clear local state
     console.log('Logging out (Client-side)...');
+
   }
 
   /**
    * Refresh the access token
    */
   static async refreshToken(refreshToken: string): Promise<{ accessToken: string }> {
-      const response = await baseApi.getAxiosInstance().post<{ accessToken: string }>('/v1/auth/refresh', {
-          refreshToken,
-      });
-      return response.data;
-}
+    const response = await baseApi.getAxiosInstance().post<{ accessToken: string }>('/v1/auth/refresh', {
+      refreshToken,
+    });
+    return response.data;
+  }
 
   /**
    * Update FCM token for push notifications
