@@ -4,17 +4,22 @@ import ReservationsCards from '../../../components/cards/reservations.cards';
 import { GlobalColors } from '../../../theme/global.colors';
 import { RoboSemiBoldText } from '../../../components';
 import { useZonesStore } from '../store/zones.store';
-import React from 'react';
+import React, { useState } from 'react';
 import { ReservationZone } from '../reservation.types';
+import MyReservationsModal from '../components/MyReservationsModal';
 
 const { height } = Dimensions.get('window');
 
 const ReservablesTab = () => {
   const { reservableZones, myReservations, isLoading, fetchZones } = useZonesStore();
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <View style={styles.mainContainer}>
-      <TouchableOpacity style={styles.myReservationsButton}>
+      <TouchableOpacity 
+        style={styles.myReservationsButton}
+        onPress={() => setModalVisible(true)}
+      >
         <RoboSemiBoldText style={styles.myReservationsText} size={15}>
           Ver mis reservas ({myReservations.length})
         </RoboSemiBoldText>
@@ -29,7 +34,14 @@ const ReservablesTab = () => {
         refreshing={isLoading}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
-        />
+      />
+
+      <MyReservationsModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        reservations={myReservations}
+        onRefresh={fetchZones}
+      />
     </View>
   );
 };

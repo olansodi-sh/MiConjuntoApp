@@ -36,7 +36,7 @@ const CreateZoneReservationScreen = ({ route, navigation }: CreateZoneReservatio
 
           <ZoneReservationComponent 
             zone={zone}
-            onSuccess={() => navigation.navigate('BottomTabsNavigation')}
+            onSuccess={() => navigation.navigate('BottomTabsNavigation', { screen: 'ReservationsScreen' } as any)}
             onCancel={() => navigation.goBack()}
           />
         </View>

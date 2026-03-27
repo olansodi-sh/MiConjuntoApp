@@ -44,4 +44,12 @@ export class ReservationsApi {
         const response = await baseApi.getAxiosInstance().get<any[]>('/v1/reservations/my');
         return response.data;
     }
+
+    /**
+     * Get a single reservation by ID
+     */
+    static async getReservationById(id: string): Promise<any> {
+        const response = await baseApi.getAxiosInstance().get(`/v1/reservations/${id}`);
+        return response.data;
+    }
 }
