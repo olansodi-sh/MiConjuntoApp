@@ -26,7 +26,6 @@ export const useReceptionStore = create<ReceptionState & ReceptionActions>((set)
     set({ isLoading: true, error: null });
     try {
       const packages = await ReceptionApi.getMyPackages();
-      console.log('Packages:', packages);
       set({ packages, isLoading: false });
     } catch (error: any) {
       set({

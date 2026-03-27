@@ -1,4 +1,10 @@
-import { View, Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { HomeStackParamList } from '../../navigation/home-stack.navigation';
@@ -19,10 +25,15 @@ const ReservationsCards = ({ data, showReserveButton = false }: any) => {
     <TouchableOpacity
       activeOpacity={0.92}
       style={styles.cardContainer}
-      onPress={() => navigation.navigate('ShowZoneDetailsScreen', { zone: data, isReservable: showReserveButton })}
+      onPress={() =>
+        navigation.navigate('ShowZoneDetailsScreen', {
+          zone: data,
+          isReservable: showReserveButton,
+        })
+      }
     >
       <Image
-        source={{ uri: data.image }}
+        source={require('../../../public/images/loginBackground.png')}
         style={styles.cardImage}
         resizeMode="cover"
       />
@@ -35,7 +46,12 @@ const ReservationsCards = ({ data, showReserveButton = false }: any) => {
           <TouchableOpacity
             activeOpacity={0.8}
             style={styles.detailsButton}
-            onPress={() => navigation.navigate('ShowZoneDetailsScreen', { zone: data, isReservable: showReserveButton })}
+            onPress={() =>
+              navigation.navigate('ShowZoneDetailsScreen', {
+                zone: data,
+                isReservable: showReserveButton,
+              })
+            }
           >
             <RoboSemiBoldText size={13} style={styles.detailsText}>
               Ver detalles
@@ -46,7 +62,11 @@ const ReservationsCards = ({ data, showReserveButton = false }: any) => {
             <TouchableOpacity
               activeOpacity={0.8}
               style={styles.reserveButton}
-              onPress={() => navigation.navigate('CreateZoneReservationScreen', { zone: data })}
+              onPress={() =>
+                navigation.navigate('CreateZoneReservationScreen', {
+                  zone: data,
+                })
+              }
             >
               <RoboSemiBoldText size={13} style={styles.reserveText}>
                 Reservar
@@ -79,7 +99,10 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     width: '38%',
-    minHeight: height * 0.15,
+    minHeight: height * 0.1,
+    height: '100%',
+    borderTopLeftRadius: 16,
+    borderBottomLeftRadius: 16,
   },
   infoContainer: {
     flex: 1,

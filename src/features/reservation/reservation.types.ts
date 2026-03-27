@@ -1,10 +1,14 @@
 export interface ReservationZone {
-  id: number;
+  id: string | number;
   name: string;
-  hasform: boolean;
-  description: string;
-  image: string;
-  rules: string[];
+  hasform?: boolean;
+  description?: string;
+  image?: string;
+  rules?: string[];
+  maxCapacity?: number;
+  phase?: string;
+  isActive?: boolean;
+  createdAt?: string;
 }
 
 export interface ReservationZonesByType {

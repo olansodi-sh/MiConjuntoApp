@@ -21,6 +21,7 @@
     "react": "19.2.3",
     "react-native": "0.84.1",
     "react-native-bouncy-checkbox": "^4.1.4",
+    "react-native-encrypted-storage": "github:emeraldsanto/react-native-encrypted-storage#324c3c832259e47c5b8ab49a9f5fa3a8aa38be5e",
     "react-native-gesture-handler": "^2.30.0",
     "react-native-pager-view": "^8.0.0",
     "react-native-safe-area-context": "^5.7.0",
