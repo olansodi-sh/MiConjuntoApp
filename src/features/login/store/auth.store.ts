@@ -33,7 +33,7 @@ const initialState: AuthState & { rememberedUser: { user: string, type: 'employe
   user: null,
   accessToken: null,
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
   error: null,
   myApartments: null,
   rememberedUser: null,

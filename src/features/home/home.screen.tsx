@@ -1,4 +1,14 @@
-import { View, FlatList, Image, TouchableOpacity, StyleSheet, StatusBar, Dimensions } from 'react-native';
+import {
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+  Dimensions,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import { HomeStackParamList } from '../../navigation/home-stack.navigation';
 import RoboExtraBoldText from '../../components/texts/robo-extrabold.text';
 import RoboSemiBoldText from '../../components/texts/robo-semibold.text';
@@ -9,110 +19,111 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { GlobalColors } from '../../theme/global.colors';
-import { Notice } from '../notices/notice.types';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNewsStore } from './store/news.store';
+import { News } from './types/news.types';
 
 type HomeNavProp = StackNavigationProp<HomeStackParamList>;
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
-const DUMMY_NOTICES: Notice[] = [
-  {
-    id: 1,
-    title: 'Mantenimiento piscina programado',
-    description:
-      'Se realizará mantenimiento preventivo en la piscina durante el fin de semana. Por favor planifique su visita con anticipación.',
-    fullDescription:
-      'Estimados residentes, informamos que el próximo fin de semana se llevará a cabo el mantenimiento preventivo trimestral de la piscina. Durante este período, el área permanecerá cerrada para garantizar la seguridad de todos. El trabajo incluye limpieza profunda, revisión del sistema de filtración y tratamiento químico del agua. Agradecemos su comprensión y paciencia durante este proceso.',
-    image: 'https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=200&h=200&fit=crop',
-    date: '24 Mar 2026',
-    category: 'Mantenimiento',
-  },
-  {
-    id: 2,
-    title: 'Asamblea general de residentes',
-    description:
-      'Convocatoria para la asamblea anual de propietarios. Se tratarán temas del presupuesto 2026 y obras pendientes.',
-    fullDescription:
-      'Se convoca a todos los propietarios y residentes a la Asamblea General Ordinaria que se realizará el próximo sábado 28 de marzo a las 10:00 AM en el salón comunal. En el orden del día se incluyen: aprobación de presupuesto 2026, informe de gestión, elección de consejo de administración y aprobación de obras de mejoramiento. Su participación es fundamental para la toma de decisiones de nuestra comunidad.',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=200&h=200&fit=crop',
-    date: '22 Mar 2026',
-    category: 'Reuniones',
-  },
-  {
-    id: 3,
-    title: 'Nuevas normas de seguridad en parqueadero',
-    description:
-      'A partir del 1 de abril se implementarán nuevos protocolos de acceso al parqueadero para mayor seguridad.',
-    fullDescription:
-      'Informamos a la comunidad que a partir del 1 de abril de 2026 se pondrán en vigencia nuevas medidas de seguridad en el área de parqueadero. Todos los vehículos deberán registrar su placa en portería al momento del ingreso. Los visitantes solo podrán acceder con autorización previa del residente. Se instalarán cámaras adicionales en todas las zonas del parqueadero.',
-    image: 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=200&h=200&fit=crop',
-    date: '20 Mar 2026',
-    category: 'Seguridad',
-  },
-  {
-    id: 4,
-    title: 'Jornada de fumigación programada',
-    description:
-      'Se realizará fumigación en zonas comunes y áreas verdes. Tome las precauciones necesarias con mascotas y niños.',
-    fullDescription:
-      'La administración informa que el día martes 31 de marzo se realizará la jornada semestral de fumigación en todas las zonas comunes del conjunto: pasillos, áreas verdes, cuarto de basuras y sótano. Se recomienda no transitar por las áreas fumigadas durante las siguientes 4 horas. Por favor proteja a sus mascotas y niños durante el proceso. El horario estimado es de 8:00 AM a 12:00 PM.',
-    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=200&h=200&fit=crop',
-    date: '18 Mar 2026',
-    category: 'Mantenimiento',
-  },
-  {
-    id: 5,
-    title: 'Corte de agua programado',
-    description:
-      'El día jueves habrá corte de agua de 8 AM a 2 PM por trabajos de mantenimiento en la red principal del conjunto.',
-    fullDescription:
-      'Por trabajos de mantenimiento y reparación en la red principal de acueducto, se realizará un corte de agua programado el día jueves 26 de marzo de 2026 entre las 8:00 AM y las 2:00 PM. Afectará a todas las torres del conjunto. Se recomienda almacenar agua con anticipación para las actividades básicas del hogar. Pedimos disculpas por los inconvenientes que esto pueda generar.',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop',
-    date: '15 Mar 2026',
-    category: 'Servicios',
-  },
-];
-
-const CategoryBadge = ({ label }: { label: string }) => (
-  <View style={styles.badge}>
-    <RoboMediumText size={10} style={styles.badgeText}>
+const CategoryBadge = ({
+  label,
+  color = GlobalColors.blueSoft,
+  textColor = GlobalColors.blueElegant,
+}: {
+  label: string;
+  color?: string;
+  textColor?: string;
+}) => (
+  <View style={[styles.badge, { backgroundColor: color }]}>
+    <RoboMediumText size={10} style={[styles.badgeText, { color: textColor }]}>
       {label}
     </RoboMediumText>
   </View>
 );
 
-const NoticeCard = ({ item }: { item: Notice }) => {
+const NoticeCard = ({ item }: { item: News }) => {
   const navigation = useNavigation<HomeNavProp>();
+
+  // Determine badge color based on category
+  const getCategoryStyles = (category?: string | any) => {
+    // If it's an object (common in some APIs), try to get the name property
+    const name = typeof category === 'string' 
+      ? category 
+      : category?.name || '';
+
+    if (!name || typeof name !== 'string')
+      return { bg: GlobalColors.blueSoft, text: GlobalColors.blueElegant };
+
+    const lowerName = name.toLowerCase();
+
+    switch (lowerName) {
+      case 'mantenimiento':
+        return { bg: '#FFF4E5', text: '#B76E00' };
+      case 'reuniones':
+        return { bg: '#EBF5FF', text: '#0055CC' };
+      case 'seguridad':
+        return { bg: '#FFEBEB', text: '#CC0000' };
+      case 'servicios':
+        return { bg: '#E8F5E9', text: '#2E7D32' };
+      default:
+        return { bg: GlobalColors.blueSoft, text: GlobalColors.blueElegant };
+    }
+  };
+
+  const catStyles = getCategoryStyles(item.category);
+  const categoryLabel = typeof item.category === 'string' 
+    ? item.category 
+    : (item.category as any)?.name || 'Noticia';
 
   return (
     <TouchableOpacity
       activeOpacity={0.92}
       style={styles.card}
-      onPress={() => navigation.navigate('NoticeDetailScreen', { notice: item })}
+      onPress={() =>
+        navigation.navigate('NoticeDetailScreen', { notice: item })
+      }
     >
-      <Image source={{ uri: item.image }} style={styles.cardImage} resizeMode="cover" />
+      <View style={styles.cardImageContainer}>
+        <Image
+          source={{ uri: item.image || 'https://via.placeholder.com/400' }}
+          style={styles.cardImage}
+          resizeMode="cover"
+        />
+        <View style={styles.cardOverlay}>
+          <CategoryBadge
+            label={categoryLabel}
+            color={catStyles.bg}
+            textColor={catStyles.text}
+          />
+        </View>
+      </View>
       <View style={styles.cardContent}>
-        <CategoryBadge label={item.category} />
-        <RoboBoldText size={14} style={styles.cardTitle} numberOfLines={2}>
-          {item.title}
-        </RoboBoldText>
-        <RoboRegularText size={12} style={styles.cardDescription} numberOfLines={2}>
-          {item.description}
-        </RoboRegularText>
-        <View style={styles.cardFooter}>
-          <RoboRegularText size={11} style={styles.cardDate}>
-            {item.date}
-          </RoboRegularText>
-          <TouchableOpacity
-            style={styles.verButton}
-            onPress={() => navigation.navigate('NoticeDetailScreen', { notice: item })}
-            activeOpacity={0.8}
+        <View>
+          <RoboBoldText size={16} style={styles.cardTitle} numberOfLines={2}>
+            {item.title || 'Sin Título'}
+          </RoboBoldText>
+          <RoboRegularText
+            size={13}
+            style={styles.cardDescription}
+            numberOfLines={2}
           >
-            <RoboSemiBoldText size={12} style={styles.verButtonText}>
-              Ver
+            {item.description || 'Sin descripción disponible.'}
+          </RoboRegularText>
+        </View>
+        <View style={styles.cardFooter}>
+          <View style={styles.dateContainer}>
+            <View style={styles.dot} />
+            <RoboRegularText size={11} style={styles.cardDate}>
+              {item.date || 'Reciente'}
+            </RoboRegularText>
+          </View>
+          <View style={styles.readMore}>
+            <RoboSemiBoldText size={12} style={styles.readMoreText}>
+              Leer más
             </RoboSemiBoldText>
-          </TouchableOpacity>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -120,28 +131,73 @@ const NoticeCard = ({ item }: { item: Notice }) => {
 };
 
 const HomeScreen = () => {
+  const { newsList, isLoading, fetchNews } = useNewsStore();
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
+
+  const onRefresh = () => {
+    fetchNews();
+  };
+
   return (
     <React.Fragment>
       <StatusBar barStyle="dark-content" backgroundColor={GlobalColors.cream} />
-      <SafeAreaView style={styles.safeareaContainer} edges={['top', 'left', 'right']}>
+      <SafeAreaView
+        style={styles.safeareaContainer}
+        edges={['top', 'left', 'right']}
+      >
         <View style={styles.mainContainer}>
           <View style={styles.titleContainer}>
-            <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} size={28} style={styles.titleText}>
+            <RoboExtraBoldText
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              size={32}
+              style={styles.titleText}
+            >
               Noticias
             </RoboExtraBoldText>
-            <RoboRegularText size={15} numberOfLines={2} style={styles.subtitleText}>
-              Mantente al día con todo lo que ocurre en tu conjunto
+            <RoboRegularText
+              size={15}
+              numberOfLines={2}
+              style={styles.subtitleText}
+            >
+              Mantente al día con todo lo que ocurre en tu conjunto residencial
             </RoboRegularText>
           </View>
-          <View style={{flex: 8.5, backgroundColor: GlobalColors.cream}}>
-            <FlatList
-              data={DUMMY_NOTICES}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({ item }) => <NoticeCard item={item} />}
-              contentContainerStyle={styles.listContent}
-              showsVerticalScrollIndicator={false}
-              ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
-            />
+
+          <View style={{ flex: 8.5, backgroundColor: GlobalColors.cream }}>
+            {isLoading && newsList.length === 0 ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={GlobalColors.navyDeep} />
+              </View>
+            ) : (
+              <FlatList
+                data={newsList}
+                keyExtractor={item => item.id.toString()}
+                renderItem={({ item }) => <NoticeCard item={item} />}
+                contentContainerStyle={styles.listContent}
+                showsVerticalScrollIndicator={false}
+                ItemSeparatorComponent={() => <View style={styles.separator} />}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={isLoading}
+                    onRefresh={onRefresh}
+                    colors={[GlobalColors.navyDeep]}
+                  />
+                }
+                ListEmptyComponent={
+                  !isLoading ? (
+                    <View style={styles.emptyContainer}>
+                      <RoboMediumText size={16} style={styles.emptyText}>
+                        No hay noticias disponibles en este momento.
+                      </RoboMediumText>
+                    </View>
+                  ) : null
+                }
+              />
+            )}
           </View>
         </View>
       </SafeAreaView>
@@ -161,91 +217,125 @@ const styles = StyleSheet.create({
     backgroundColor: GlobalColors.cream,
   },
   titleContainer: {
-    flex: 1.2,
+    paddingVertical: 20,
     width: '90%',
     alignSelf: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    backgroundColor: GlobalColors.cream,
   },
   titleText: {
-    alignSelf: 'center',
     color: GlobalColors.navyDeep,
+    letterSpacing: -0.5,
   },
   subtitleText: {
-    width: '90%',
-    marginTop: '3%',
-    alignSelf: 'center',
-    textAlign: 'center',
-    alignItems: 'center',
+    marginTop: 6,
     color: GlobalColors.charcoalSoft,
+    lineHeight: 20,
   },
   listContent: {
-    paddingTop: height * 0.02,
-    paddingBottom: height * 0.03,
+    paddingTop: 10,
+    paddingBottom: 40,
     paddingHorizontal: width * 0.05,
   },
   card: {
-    elevation: 3,
-    borderWidth: 1,
-    shadowRadius: 8,
-    borderRadius: 16,
-    overflow: 'hidden',
-    shadowOpacity: 0.07,
-    flexDirection: 'row',
-    shadowColor: GlobalColors.navyDeep,
     backgroundColor: GlobalColors.white,
-    borderColor: GlobalColors.marbleGray,
-    shadowOffset: { width: 0, height: 2 },
+    borderRadius: 20,
+    overflow: 'hidden',
+    elevation: 4,
+    shadowColor: GlobalColors.navyDeep,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.05)',
+  },
+  cardImageContainer: {
+    width: '100%',
+    height: 180,
   },
   cardImage: {
+    width: '100%',
     height: '100%',
-    width: width * 0.22,
-    minHeight: height * 0.14,
+  },
+  cardOverlay: {
+    position: 'absolute',
+    top: 15,
+    left: 15,
   },
   cardContent: {
+    padding: 16,
     flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    justifyContent: 'space-between',
   },
   badge: {
-    marginBottom: 5,
-    borderRadius: 6,
-    paddingVertical: 3,
-    paddingHorizontal: 7,
+    borderRadius: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
     alignSelf: 'flex-start',
-    backgroundColor: GlobalColors.blueSoft,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   badgeText: {
-    color: GlobalColors.blueElegant,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
   cardTitle: {
-    lineHeight: 19,
-    marginBottom: 4,
+    lineHeight: 22,
+    marginBottom: 8,
     color: GlobalColors.navyDeep,
   },
   cardDescription: {
-    flex: 1,
-    lineHeight: 17,
+    lineHeight: 18,
     color: GlobalColors.charcoalSoft,
+    marginBottom: 15,
   },
   cardFooter: {
-    marginTop: 8,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.05)',
+    paddingTop: 12,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: GlobalColors.blueElegant,
+    marginRight: 6,
   },
   cardDate: {
     color: GlobalColors.gray8,
   },
-  verButton: {
-    borderRadius: 8,
-    paddingVertical: 5,
-    paddingHorizontal: 14,
-    backgroundColor: GlobalColors.navyDeep,
+  readMore: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  verButtonText: {
-    color: GlobalColors.white,
+  readMoreText: {
+    color: GlobalColors.navyDeep,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 50,
+  },
+  emptyText: {
+    color: GlobalColors.charcoalSoft,
+    textAlign: 'center',
+  },
+  separator: {
+    height: 16,
   },
 });
