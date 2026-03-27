@@ -5,6 +5,7 @@ import { RoboExtraBoldText, RoboRegularText } from '../../components';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GlobalColors } from '../../theme/global.colors';
 import { RouteProp } from '@react-navigation/native';
+import ZoneReservationComponent from '../reservation/components/zone.reservation.component';
 import React from 'react';
 
 type CreateZoneReservationRouteProp = RouteProp<HomeStackParamList, 'CreateZoneReservationScreen'>;
@@ -29,9 +30,15 @@ const CreateZoneReservationScreen = ({ route, navigation }: CreateZoneReservatio
               <RoboRegularText size={15} style={styles.backText}>Atrás</RoboRegularText>
             </TouchableOpacity>
             <RoboExtraBoldText adjustsFontSizeToFit numberOfLines={1} size={22} style={styles.titleText}>
-              Reservar — {zone.name}
+              Nueva solicitud
             </RoboExtraBoldText>
           </View>
+
+          <ZoneReservationComponent 
+            zone={zone}
+            onSuccess={() => navigation.navigate('BottomTabsNavigation')}
+            onCancel={() => navigation.goBack()}
+          />
         </View>
       </SafeAreaView>
     </React.Fragment>

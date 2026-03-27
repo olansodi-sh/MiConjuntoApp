@@ -11,7 +11,6 @@ import { HomeStackParamList } from '../../navigation/home-stack.navigation';
 import { GlobalColors } from '../../theme/global.colors';
 import RoboBoldText from '../texts/robo-bold.text';
 import RoboSemiBoldText from '../texts/robo-semibold.text';
-import RoboRegularText from '../texts/robo-regular.text';
 import React from 'react';
 
 type CardNavProp = StackNavigationProp<HomeStackParamList>;

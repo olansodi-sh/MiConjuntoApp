@@ -2,10 +2,12 @@
 import { create } from 'zustand';
 import { ReservationZone } from '../reservation.types';
 import { ZonesApi } from '../api/zones.api';
+import { ReservationsApi } from '../api/reservations.api';
 
 interface ZonesState {
     reservableZones: ReservationZone[];
     commonZones: ReservationZone[];
+    myReservations: any[]; // User's personal reservations
     selectedZone: ReservationZone | null;
     isLoading: boolean;
     error: string | null;
@@ -13,6 +15,7 @@ interface ZonesState {
 
 interface ZonesActions {
     fetchZones: () => Promise<void>;
+    fetchMyReservations: () => Promise<void>;
     fetchZoneById: (id: string) => Promise<ReservationZone | null>;
     setLoading: (loading: boolean) => void;
     clearError: () => void;
@@ -21,6 +24,7 @@ interface ZonesActions {
 const initialState: ZonesState = {
     reservableZones: [],
     commonZones: [],
+    myReservations: [],
     selectedZone: null,
     isLoading: false,
     error: null,
@@ -32,14 +36,26 @@ export const useZonesStore = create<ZonesState & ZonesActions>((set) => ({
     fetchZones: async () => {
         set({ isLoading: true, error: null });
         try {
-            const reservableZones = await ZonesApi.getMyReservableZones();
-            const commonZones = await ZonesApi.getMyCommonZones();
-            set({ reservableZones, commonZones, isLoading: false });
+            const [reservableZones, commonZones, myReservations] = await Promise.all([
+                ZonesApi.getMyReservableZones(),
+                ZonesApi.getMyCommonZones(),
+                ReservationsApi.getMyReservations()
+            ]);
+            set({ reservableZones, commonZones, myReservations, isLoading: false });
         } catch (error: any) {
             set({
                 isLoading: false,
                 error: error.message || 'Error al obtener zonas',
             });
+        }
+    },
+
+    fetchMyReservations: async () => {
+        try {
+            const myReservations = await ReservationsApi.getMyReservations();
+            set({ myReservations });
+        } catch (error: any) {
+            console.error('Error fetching my reservations:', error);
         }
     },
 

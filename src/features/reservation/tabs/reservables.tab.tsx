@@ -5,24 +5,24 @@ import { GlobalColors } from '../../../theme/global.colors';
 import { RoboSemiBoldText } from '../../../components';
 import { useZonesStore } from '../store/zones.store';
 import React from 'react';
-import { Zone } from '../types/zones.types';
+import { ReservationZone } from '../reservation.types';
 
 const { height } = Dimensions.get('window');
 
 const ReservablesTab = () => {
-  const { reservableZones, isLoading, fetchZones } = useZonesStore();
+  const { reservableZones, myReservations, isLoading, fetchZones } = useZonesStore();
 
   return (
     <View style={styles.mainContainer}>
       <TouchableOpacity style={styles.myReservationsButton}>
         <RoboSemiBoldText style={styles.myReservationsText} size={15}>
-          Ver mis reservas (0)
+          Ver mis reservas ({myReservations.length})
         </RoboSemiBoldText>
       </TouchableOpacity>
       <FlatList
         data={reservableZones}
-        keyExtractor={(item: Zone) => item.id.toString()}
-        renderItem={({ item }: { item: Zone }) => (
+        keyExtractor={(item: ReservationZone) => item.id.toString()}
+        renderItem={({ item }: { item: ReservationZone }) => (
           <ReservationsCards data={item} showReserveButton={true} />
         )}
         onRefresh={fetchZones}
